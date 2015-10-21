@@ -1,112 +1,147 @@
 import java.io.*;
 public class Kisokadai3 {
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); //どこのメソッドでもreadLineを使うためここで宣言
-	public static void main(String[] args) {
-		String str = ""; //パスを含めたファイル名を保存
-		int No = 0; //ファイルに対する命令を保存
-
-		str = create(); //ファイル指定のメソッド呼び出し
-		//終了の4が入力されるまでループ
-		while(No != 4){
-			String filename = new File(str).getName(); //現在指定されているファイル名を取得
-			System.out.println("現在開かれているファイル : " + filename); //現在指定されているファイル名表示
-			No = menu(); //ファイルに何をするか入力を求めるメソッド呼び出し
-			switch(No){
-			case 1:filewrite(str); break; //書き込みメソッドの呼び出し
-			case 2:fileread(str); break; //読み込みメソッドの呼び出し
-			case 3:str = create(); break; //ファイルの指定メソッドの呼び出し
-			case 4:System.out.println("終了します"); break; //全ての操作を終了
-			default:System.out.println("指定内の数字を入力して下さい"); break; //1から4以外の数字が入力された時
-			}
-		}
-	}
-
-	static int menu(){//一番最初のメニュー画面
-		int x = 0; //何を選択したかを保存
-		try{
-			System.out.println("1:書き込み  2:読み込み  3:ファイルの再指定  4:終了");
-			System.out.print("実行内容を数字で入力してください : ");
-			x = Integer.parseInt(br.readLine());
-		}catch(Exception e){
-			System.out.println("指定されている数字を入力して下さい");
-		}
-		return x; //指定された選択を対応している数字で返す
-	}
-	
-	static String create(){ //ファイルを指定
-		String st = "";
-		try{
-			System.out.println("以下のようにファイル名を記載して下さい");
-			System.out.println("例 - C:/Users//internous//test.txt");
-			st = br.readLine(); //ファイル名とパスを取得
-		}catch(Exception e){
-			System.out.println(e);
-		}
-		File file = new File(st); //ファイルの存在チェック、作成用
-		File dir = new File(file.getParent()); //ディレクトリの存在チェック、作成用
-		//mkdirｓは複数階層のディレクトリがなくても一括で作成する
-		if(dir.mkdirs()){//ディレクトリを新しく作成出来ればtrue、作成できなければfalseを返す
-			System.out.println("新しくディレクトリを作成します");
-		}else{
-			System.out.println("ディレクトリが存在します");
-		}
-		if(file.exists()){ //ファイルが存在しているかチェック
-			System.out.println("ファイルを開きます");
-		}else{
+	public static void main(String[] args){
+		int x = 0;
+		while(x!=1){
+		System.out.println("メニューを表示します"); 
+		System.out.println("番号を入力してください"); 
+		System.out.println("１　ファイルの作成"); 
+		System.out.println("２　ファイルの書き込み"); 
+		System.out.println("３　ファイルの読み込み"); 
+		System.out.println("４　終了"); 
+		System.out.print("="); 
+		
+		int a;
+		InputStreamReader isr= new InputStreamReader(System.in); 
+		BufferedReader br = new BufferedReader(isr); 
+		try{ 
+			String buf = br.readLine(); 
+			a = Integer.parseInt(buf); 
+		}catch(Exception e){ 
+			a = 0; 
+		} 
+		if(a==1){
+			//ファイル作成プログラム↓
+			String sakusei = "";
 			try{
-				file.createNewFile();
-				System.out.println("新しくファイルを作成します");
-			}catch(Exception e){
-				System.out.println("Error");
-				System.out.println("ファイルの再指定を行って下さい");
+			System.out.println("新規作成したい場所を指定＋ファイル名＋拡張子");
+			System.out.println("例 =C:/Users//internous//test.txt");
+			System.out.print("=");
+			sakusei=br.readLine();
 			}
-		}
-		return st; //記載したファイル名とパスを返す
-	}
-
-	static void filewrite(String st){//書き込み用
-		int x = 0; //選択の保存用
-		while(x != 3){
+			catch(Exception e){
+			}
+			//入力したファイルがあるかどうか検索
+			File file = new File(sakusei); 
+			File dir = new File(file.getParent()); 
+			
+			//入力したファイルがなければ作成
 			try{
-				System.out.println("書き込み方法を指定して下さい");
-				System.out.print("1:上書き    2:追記   3:終了    :  ");
-				x = Integer.parseInt(br.readLine());
-				String filestr = ""; //入力文字列の保存
-				if(x == 1){//上書き
-					FileWriter fileuwagaki = new FileWriter(new File(st)); //パスに指定されたファイルに書き込みを行う宣言
-					System.out.print("入力内容:");
+			if(dir.exists()){ //フォルダの存在のチェック
+				System.out.println("ディレクトリは存在します。");
+				System.out.println("メニューに戻ります");
+			}else{
+				System.out.println("新しくディレクトリを作成しました。");
+				dir.mkdir(); //ディレクトリ作成
+			}
+			if(file.exists()){ //ファイルの存在のチェック
+				System.out.println("ファイルは存在します。");
+				System.out.println("メニューに戻ります");
+			}else{
+				System.out.println("新しくファイルを作成しました。");
+				
+					file.createNewFile(); //ファイル作成
+			}
+				}catch(Exception e){
+				}
+		}
+		if(a==2){
+		//ファイル書き込みのプログラム
+			String kakikomi = "";
+			try{
+				//書き込みファイルの指定
+				System.out.println("書き込みたい場所を指定＋ファイル名＋拡張子");
+				System.out.println("例 =C:/Users//internous//test.txt");
+				System.out.print("=");
+				kakikomi=br.readLine();
+				}
+				catch(Exception e){
+				}
+			File checkfile = new File(kakikomi);
+			if(!checkfile.exists()){
+				System.out.println("そのファイルは存在しません。");
+				System.out.println("新しくファイルを作成しました。");
+			}
+			
+			int c = 0;
+			while(c != 3){
+				String filestr = "";
+				try{
+					//書き込み方法の選択
+					System.out.println("書き込み方法を指定してください");
+					System.out.println("1.上書き    2.追記   3.終了");
+					System.out.print("=");
+					c = Integer.parseInt(br.readLine());//入力受付
+				if(c == 1){
+					//ファイルへ上書き
+					FileWriter fileuwagaki = new FileWriter(new File(kakikomi));
+					System.out.print("入力してください");
+					System.out.print("=");
 					filestr = br.readLine();
-					fileuwagaki.write(filestr + "\r\n"); //入力された文字列を上書き   //改行方法 Windows=\r\n  Linux=\n
+					fileuwagaki.write(filestr + "\r\n"); //入力された文字列を上書き 
 					fileuwagaki.close();
-				}else if(x == 2){//追記
-					FileWriter filetuiki = new FileWriter(new File(st),true); //trueを入れることで指定ファイルに追記できる
-					System.out.print("入力内容:");
+				}else if(c == 2){
+					//ファイルへ追記
+					FileWriter filetuiki = new FileWriter(new File(kakikomi),true);
+					//trueを入れることで指定ファイルに追記できる
+					System.out.print("入力してください");
+					System.out.print("=");
 					filestr = br.readLine();
 					filetuiki.write(filestr + "\r\n");
 					filetuiki.close();
-				}else if(x == 3){//終了
+				}else if(c == 3){//終了
 					System.out.println("書き込みを終了します");
 				}else{//指定外の数字が入力された時
-					System.out.println("指定内の数字を入力して下さい");
+					System.out.println("指定内の数字を入力してください");
+				}  			
+				
+				}catch(Exception e){
+					System.out.println("指定内の数字を入力してください");
 				}
-			}catch(Exception e){
-				System.out.println("指定内の数字を入力して下さい");
 			}
 		}
-	}
-
-	static void fileread(String st){//読み込み
-		try{
-			BufferedReader fileread = new BufferedReader(new FileReader(new File(st))); //指定ファイルをまとめて読み込み
-			String readstr = "";
-			System.out.println("---" + st + "-----"); //読み込み開始
-			while((readstr = fileread.readLine()) != null){ //上から1行ずつ読み込んで表示。中身がnull(なにも書いてない)になったら終了
-				System.out.println(readstr);
+			if(a==3){
+				String yomikomi = "";
+				try{
+					//読み込みファイルの指定
+					System.out.println("読み込みたい場所を指定＋ファイル名＋拡張子");
+					System.out.println("例 =C:/Users//internous//test.txt");
+					System.out.print("=");
+					yomikomi =br.readLine();
+					BufferedReader fileread = new BufferedReader(new FileReader(new File(yomikomi)));
+					//指定ファイルをまとめて読み込み
+					String readstr = "";
+					System.out.println("---" + yomikomi + "-----"); //読み込み開始
+					while((readstr = fileread.readLine()) != null){
+						//上から1行ずつ読み込んで表示。中身がnull(なにも書いてない)になったら終了
+						System.out.println(readstr);
+					}
+					System.out.println("---------------------------------"); //読み込み終了
+					fileread.close();
+				}catch(Exception e){
+					System.out.println("Error");
+					}
+				
 			}
-			System.out.println("---------------------------------"); //読み込み終了
-			fileread.close();
-		}catch(Exception e){
-			System.out.println("Error");
+			if(a==4);{
+				System.out.println("終了しますか");
+				System.out.println("１　はい　　　２　いいえ");
+				try{
+					x=Integer.parseInt(br.readLine());
+				}catch(Exception e){
+				}
+			}
 		}
+		System.out.println("終了しました。");
 	}
 }
