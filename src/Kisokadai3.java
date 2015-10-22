@@ -53,6 +53,7 @@ public class Kisokadai3 {
 					file.createNewFile(); //ファイル作成
 			}
 				}catch(Exception e){
+					System.out.println("エラーです");
 				}
 		}
 		if(a==2){
